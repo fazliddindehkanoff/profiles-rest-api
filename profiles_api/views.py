@@ -1,6 +1,6 @@
 from rest_framework.views import APIView
 from rest_framework.response import Response
-from rest_framework import status
+from rest_framework import status, viewsets
 
 from .serializers import TestSerializer
 
@@ -41,4 +41,43 @@ class HelloApiView(APIView):
         """Handling delete method"""
         return Response({"method":"DELETE"})
 
-        
+
+class HelloViewSet(viewsets.ViewSet):
+    """ Test api view set for understanding and learning"""
+    serializer_class = TestSerializer
+
+    def list(self, request):
+        """Return Hello world message"""
+        return Response({"message":"Hello world this is api created by viewset "})
+
+    def create(self, request):
+        """Handle Creating object"""
+        serializer = self.serializer_class(data=request.data)
+
+        if serializer.is_valid():
+            first_name = serializer.validated_data.get("first_name")
+            last_name = serializer.validated_data.get("last_name")
+
+            return Response({"message": f"Hi {first_name} {last_name} welcome"})
+
+        else:
+            return Response(
+                serializer.errors,
+                status=status.HTTP_400_BAD_REQUEST
+            )
+
+    def retrieve(self, request, pk=None):
+        """Get object by specific id"""
+        return Response({"http_method": "GET"})
+
+    def update(self, request, pk=None):
+        """Update an object"""
+        return Response({"http_method": "PUT"})
+
+    def partial_update(self, request, pk=None):
+        """Update part of object"""
+        return Response({"http_method":"PATCH"})
+
+    def destroy(self, request, pk=None):
+        """Delete object by it's Id """
+        return Response({"http_method":"DELETE"})
