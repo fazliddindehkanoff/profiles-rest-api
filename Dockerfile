@@ -1,12 +1,7 @@
-FROM python:3.7.13-alpine3.16 
-
+FROM python:3
+ENV PYTHONDONTWRITEBYTECODE=1
+ENV PYTHONUNBUFFERED=1
 WORKDIR /profiles-rest-api
-
-RUN pip3 install virtualenv
-RUN virtualenv env
-
-COPY requirements.txt requirements.txt
-
-RUN source env/bin/activate && pip3 install -r requirements.txt
-EXPOSE 8000
-COPY . .
+COPY requirements.txt /profiles-rest-api/
+RUN pip3 install -r requirements.txt
+COPY . /profiles-rest-api/
